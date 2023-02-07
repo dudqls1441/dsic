@@ -23,7 +23,18 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public int checkId(String id) {
 		int cnt = this.memberDao.checkId(id);
-		return 0;
+		return cnt;
 	}
 
+	@Override
+	public int create(Map<String, Object> map) {
+		int cnt = this.memberDao.create(map);
+		return cnt;
+	}
+
+	@Override
+	public Map<String, Object> selectMember(String id) {
+		Map<String, Object> map = this.memberDao.selectMember(id);
+		return map;
+	}
 }

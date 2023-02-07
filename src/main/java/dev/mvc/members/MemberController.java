@@ -54,10 +54,20 @@ public class MemberController {
 	@RequestMapping(value = "/members/create.do", method = RequestMethod.POST)
 	public ModelAndView create(@RequestParam Map<String, Object> map) {
 		ModelAndView mav = new ModelAndView();
+		
+		int cnt= this.memberService.create(map);
+		System.out.println("map.id  : " +map.get("id").toString());
+		Map<String, Object> member = this.memberService.selectMember(map.get("id").toString());
+		System.out.println("member : " + member);
+	    if (cnt == 1) {
+		      mav.addObject("code", "create_success");
+		      mav.addObject("name", member.get("name"));  // 홍길동님(user4) 회원 가입을 축하합니다.
+		      mav.addObject("id", member.get("id"));
+		    } else {
+		      mav.addObject("code", "create_fail");
+		    }
 
-		mav.setViewName("/members/create");
-
-		return mav;
+		return null;
 	}
 
 //		http://localhost:8080/members/checkId.do
