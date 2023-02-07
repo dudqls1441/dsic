@@ -1,11 +1,10 @@
 package dev.mvc.members;
 
 import java.util.List;
-import java.util.Map;
 
 public interface MemberService {
 
-	List<String> selectId(Map<String, Object> map);
+	List<String> selectId();
 	int checkId(String id);
 
 }

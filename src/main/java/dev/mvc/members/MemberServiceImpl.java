@@ -13,8 +13,8 @@ public class MemberServiceImpl implements MemberService{
 	MemberDAO memberDao;
 	
 	@Override
-	public List<String> selectId(Map<String, Object> map) {
-	    List<String> list= this.memberDao.selectId(map);
+	public List<String> selectId() {
+	    List<String> list= this.memberDao.selectId();
 
 	    return list;
 
