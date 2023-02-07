@@ -54,20 +54,22 @@ public class MemberController {
 	@RequestMapping(value = "/members/create.do", method = RequestMethod.POST)
 	public ModelAndView create(@RequestParam Map<String, Object> map) {
 		ModelAndView mav = new ModelAndView();
-		
-		int cnt= this.memberService.create(map);
-		System.out.println("map.id  : " +map.get("id").toString());
+
+		int cnt = this.memberService.create(map);
+		System.out.println("map.id  : " + map.get("id").toString());
 		Map<String, Object> member = this.memberService.selectMember(map.get("id").toString());
 		System.out.println("member : " + member);
-	    if (cnt == 1) {
-		      mav.addObject("code", "create_success");
-		      mav.addObject("name", member.get("name"));  // 홍길동님(user4) 회원 가입을 축하합니다.
-		      mav.addObject("id", member.get("id"));
-		    } else {
-		      mav.addObject("code", "create_fail");
-		    }
-
-		return null;
+		if (cnt == 1) {
+			mav.addObject("code", "create_success");
+			mav.addObject("name", member.get("NAME")); // 홍길동님(user4) 회원 가입을 축하합니다.
+			mav.addObject("id", member.get("ID"));
+		} else {
+			mav.addObject("code", "create_fail");
+		}
+		mav.addObject("cnt", cnt);
+		mav.addObject("url", "/members/msg");
+		mav.setViewName("redirect:/members/msg.do");
+		return mav;
 	}
 
 //		http://localhost:8080/members/checkId.do
@@ -76,10 +78,23 @@ public class MemberController {
 	public String checkId(String id) {
 
 		int cnt = this.memberService.checkId(id);
-		
-	    JSONObject json = new JSONObject();
-	    json.put("cnt", cnt);
-	   
-	    return json.toString();
+
+		JSONObject json = new JSONObject();
+		json.put("cnt", cnt);
+
+		return json.toString();
 	}
+	
+	  /**
+	   * 새로고침 방지, EL에서 param으로 접근
+	   * @return
+	   */
+	  @RequestMapping(value="/members/msg.do", method=RequestMethod.GET)
+	  public ModelAndView msg(String url){
+	    ModelAndView mav = new ModelAndView();
+
+	    mav.setViewName(url); // forward
+	    
+	    return mav; // forward
+	  }
 }

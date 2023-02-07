@@ -21,6 +21,7 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 <script type="text/JavaScript">
+	var idFlag = false;
 	$(function() { // 자동 실행
 		// id가 'btn_checkID'인 태그를 찾아 'click' 이벤트 처리자(핸들러)로 checkID 함수를 등록
 		$('#btnCheckID').on('click', checkID);
@@ -58,11 +59,15 @@
 					// alert(rdata);
 					var msg = "";
 					if (rdata.cnt > 0) {
+						idFlag = false;
+						console.log("idFlag--->  : " +idFlag);
 						$('#modal_content').attr('class',
 								'alert alert-danger'); // Bootstrap CSS 변경
 						msg = "이미 사용중인 ID 입니다.";
 						$('#btn_close').attr("data-focus", "id"); // id 입력으로 focus 이동
 					} else {
+						idFlag = true;
+						console.log("idFlag--->  : " +idFlag);
 						$('#modal_content').attr('class',
 								'alert alert-success'); // Bootstrap CSS 변경
 						msg = "사용 가능한 ID 입니다.";
@@ -80,28 +85,146 @@
 			});
 		}
 	}
+
 	function send() { // 회원 가입 처리
-/* 		if(checkId ==false){
-			msg = '중복확인해주세요';
-			$('#modal_content').attr('class', 'alert alert-danger'); // CSS 변경
-			$('#modal_title').html('중복확인'); // 제목 
+		if(!validation()){
+			return false;
+		}else{
+			console.log("send 눌림2");
+			$('#frm').submit();
+		}
+		console.log("send 눌림");
+		$('#frm').submit();
+	}
+	function validation() {
+		var frm = $('#frm'); // id가 frm인 태그 검색
+		var id = $('#id', frm).val(); // frm 폼에서 id가 'id'인 태그 검색
+		var name = $('#name', frm).val(); 
+		var pw = $('#pw', frm).val(); 
+		var nickname = $('#nickname', frm).val(); 
+		var phone = $('#phone', frm).val(); 
+		if(id.length == 0){
+			console.log("ID를 입력해주세요 ");
+			msg = 'ID를 입력해주세요 .<br>';
+			$('#modal_title').html('ID 입력 확인'); // 제목 
 			$('#modal_content').html(msg); // 내용
 			$('#modal_panel').modal(); // 다이얼로그 출력
-			$('#btn_send').attr('data-focus', 'id');
-			return false; // submit 중지
-		} */
+			$('#modal_content').attr('class', 'alert alert-danger'); // CSS 변경
+			$('#id').focus();
+			return false;
+		}
+		if(name.length == 0){
+			console.log("성명을 입력해주세요 ");
+			msg = '성명을 입력해주세요 .<br>';
+			$('#modal_title').html('성명 입력 확인'); // 제목 
+			$('#modal_content').html(msg); // 내용
+			$('#modal_panel').modal(); // 다이얼로그 출력
+			$('#modal_content').attr('class', 'alert alert-danger'); // CSS 변경
+			$('#name').focus();
+			return false;
+		}
+		if(nickname.length == 0){
+			console.log("닉네임을 입력해주세요 ");
+			msg = '닉네임을 입력해주세요 .<br>';
+			$('#modal_title').html('닉네임 입력 확인'); // 제목 
+			$('#modal_content').html(msg); // 내용
+			$('#modal_panel').modal(); // 다이얼로그 출력
+			$('#modal_content').attr('class', 'alert alert-danger'); // CSS 변경
+			$('#nickname').focus();
+			return false;
+		}
+		if(phone.length == 0){
+			console.log("전화번호를 입력해주세요 ");
+			msg = '전화번호를 입력해주세요 .<br>';
+			$('#modal_title').html('전화번호 입력 확인'); // 제목 
+			$('#modal_content').html(msg); // 내용
+			$('#modal_panel').modal(); // 다이얼로그 출력
+			$('#modal_content').attr('class', 'alert alert-danger'); // CSS 변경
+			$('#phone').focus();
+			return false;
+		}
+		if(idFlag == false){
+			console.log("ID중복확인해주세요 ");
+			msg = 'ID중복확인해주세요.<br>';
+			$('#modal_title').html('ID 중복확인'); // 제목 
+			$('#modal_content').html(msg); // 내용
+			$('#modal_panel').modal(); // 다이얼로그 출력
+			$('#modal_content').attr('class', 'alert alert-danger'); // CSS 변경
+			$('#id').focus();
+			return false;
+		}
+		if(pw.length == 0){
+			console.log("패스워드를 입력해주세요 ");
+			msg = '패스워드를 입력해주세요.<br>';
+			$('#modal_title').html('패스워드 입력 확인'); // 제목 
+			$('#modal_content').html(msg); // 내용
+			$('#modal_panel').modal(); // 다이얼로그 출력
+			$('#modal_content').attr('class', 'alert alert-danger'); // CSS 변경
+			$('#pw').focus();
+			return false;
+		}
 		// 패스워드를 정상적으로 2번 입력했는지 확인
 		if ($('#pw').val() != $('#pw2').val()) {
+			console.log("패스워드가 다릅니다.");
 			msg = '입력된 패스워드가 일치하지 않습니다.<br>';
 			msg += "패스워드를 다시 입력해주세요.<br>";
-			$('#modal_content').attr('class', 'alert alert-danger'); // CSS 변경
 			$('#modal_title').html('패스워드 일치 여부  확인'); // 제목 
 			$('#modal_content').html(msg); // 내용
 			$('#modal_panel').modal(); // 다이얼로그 출력
-			$('#btn_send').attr('data-focus', 'pw');
+			$('#modal_content').attr('class', 'alert alert-danger'); // CSS 변경
 			return false; // submit 중지
 		}
-		$('#frm').submit();
+		if(!checkPw()){
+			console.log("비밀번호 정규식");
+			msg = '비밀번호 정규식을 맞추세요<br>';
+			$('#modal_title').html('비밀번호 정규식'); // 제목 
+			$('#modal_content').html(msg); // 내용
+			$('#modal_panel').modal(); // 다이얼로그 출력
+			$('#modal_content').attr('class', 'alert alert-danger'); // CSS 변경	
+			return false;
+		}
+		
+		return true;
+	}
+	function checkPw() {
+		var frm = $('#frm'); 
+		var pw = $('#pw', frm).val();
+		var flag = false;
+		// 비밀번호 규칙 정규식
+		// : 숫자, 특문 각 1회 이상, 영문은 2개 이상 사용하여 8자리 이상 입력
+		var regExpPw = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,50}$/;
+		if(pw.match(regExpPw) == null){
+			console.log("비밀번호 정규식 위반");
+			return false;
+		}else{
+			console.log("비밀번호 정규식 통과");
+			return true;
+		}
+	}
+	function keyevent() {
+		var targetId = event.target.id;
+		var id = $('#id').val();
+		var pw = $('#pw').val();
+		var pw2 = $('#pw2').val();
+		
+		switch (targetId) {
+		case "id":
+			console.log("id눌림");
+			idFlag = false;
+			break;
+		case "pw":
+			console.log("pw2 눌림");
+			checkPw();
+			break;
+		case "pw2":
+			console.log("pw2 눌림");
+			if(pw == pw2){
+				console.log("pw pw2 같음");
+			}else{
+				console.log("pw pw2 다름");
+			}
+			break;
+		}
 	}
 	</script>
 </head>
@@ -148,7 +271,7 @@
 				<div class="col-md-10">
 					<input type='text' class="form-control" name='id' id='id' value=''
 						required="required" style='width: 30%;' placeholder="아이디"
-						autofocus="autofocus">
+						onkeyup="keyevent(this);" autofocus="autofocus">
 					<button type='button' id="btnCheckID" class="btn btn-info btn-md">중복확인</button>
 					<SPAN id='id_span'></SPAN>
 					<!-- ID 중복 관련 메시지 -->
@@ -159,7 +282,8 @@
 				<label for="pw" class="col-md-2 control-label"
 					style='font-size: 0.9em;'>패스워드*</label>
 				<div class="col-md-10">
-					<input type='pw' class="form-control" name='pw' id='pw' value=''
+					<input type='password' class="form-control" name='pw' id='pw'
+						value='' maxlength="20" onkeyup="keyevent(this);"
 						required="required" style='width: 30%;' placeholder="패스워드">
 				</div>
 			</div>
@@ -168,7 +292,8 @@
 				<label for="pw2" class="col-md-2 control-label"
 					style='font-size: 0.9em;'>패스워드 확인*</label>
 				<div class="col-md-10">
-					<input type='pw' class="form-control" name='pw2' id='pw2' value=''
+					<input type="password" class="form-control" name='pw2' id='pw2'
+						value='' maxlength="40" onkeyup="keyevent(this);"
 						required="required" style='width: 30%;' placeholder="패스워드">
 				</div>
 			</div>
@@ -178,16 +303,18 @@
 					style='font-size: 0.9em;'>성명*</label>
 				<div class="col-md-10">
 					<input type='text' class="form-control" name='name' id='name'
-						value='' required="required" style='width: 30%;' placeholder="성명">
+						maxlength="10" value='' required="required" style='width: 30%;'
+						placeholder="성명">
 				</div>
 			</div>
-			
+
 			<div class="form-group">
 				<label for="nickname" class="col-md-2 control-label"
 					style='font-size: 0.9em;'>닉네임*</label>
 				<div class="col-md-10">
-					<input type='text' class="form-control" name='nickname' id='nickname'
-						value='' required="required" style='width: 30%;' placeholder="닉네임">
+					<input type='text' class="form-control" name='nickname'
+						id='nickname' maxlength="40" value='' required="required"
+						style='width: 30%;' placeholder="닉네임">
 				</div>
 			</div>
 
@@ -196,18 +323,19 @@
 					style='font-size: 0.9em;'>전화번호*</label>
 				<div class="col-md-10">
 					<input type='text' class="form-control" name='phone' id='phone'
-						value='' required="required" style='width: 30%;'
+						maxlength="40" value='' required="required" style='width: 30%;'
 						placeholder="전화번호"> 예) 010-0000-0000
 				</div>
 			</div>
-			
+
 
 			<div class="form-group">
 				<label for="housecode" class="col-md-2 control-label"
 					style='font-size: 0.9em;'>우편번호</label>
 				<div class="col-md-10">
 					<input type='text' class="form-control" name='housecode'
-						id='housecode' value='' style='width: 30%;' placeholder="우편번호">
+						maxlength="5" id='housecode' value='' style='width: 30%;'
+						placeholder="우편번호">
 					<button type="button" id="btnDaumPostcode"
 						class="btn btn-info btn-md">우편번호 찾기</button>
 				</div>
@@ -218,7 +346,8 @@
 					style='font-size: 0.9em;'>주소</label>
 				<div class="col-md-10">
 					<input type='text' class="form-control" name='address1'
-						id='address1' value='' style='width: 80%;' placeholder="주소">
+						maxlength="100" id='address1' value='' style='width: 80%;'
+						placeholder="주소">
 				</div>
 			</div>
 
@@ -227,7 +356,8 @@
 					style='font-size: 0.9em;'>상세 주소</label>
 				<div class="col-md-10">
 					<input type='text' class="form-control" name='address2'
-						id='address2' value='' style='width: 80%;' placeholder="상세 주소">
+						maxlength="50" id='address2' value='' style='width: 80%;'
+						placeholder="상세 주소">
 				</div>
 			</div>
 
