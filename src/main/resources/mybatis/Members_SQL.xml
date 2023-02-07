@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="members">
+
+	<select id="checkId" resultType="int" parameterType="String">
+		SELECT COUNT(id) as cnt
+		FROM members
+		WHERE id=#{id}
+	</select>
+	<select id="selectId" resultType="hashMap" parameterType="hashMap">
+		SELECT
+		id
+		FROM members
+	</select>
+
+	<select id="list" resultType="hashMap"  parameterType="hashMap">
+		SELECT mno, id, pw, name, phone
+		FROM members
+		ORDER BY mno ASC
+	</select>
+	
+	<insert id="create" parameterType="hashMap" useGeneratedKeys="true" >
+    <![CDATA[
+    insert into members
+    (mno, id, pw, name, nickname, phone, housecode, address1, address2, rdate)
+    values
+    (members_seq.nextval, #{id, jdbcType=VARCHAR}, #{pw, jdbcType=VARCHAR}, #{name, jdbcType=VARCHAR}, #{nickname, jdbcType=VARCHAR}, #{phone, jdbcType=VARCHAR}, #{housecode, jdbcType=VARCHAR}, #{address1, jdbcType=VARCHAR}, #{address2, jdbcType=VARCHAR},sysdate)
+    ]]>
+	</insert>
+	<select id="selectMember" resultType="hashMap" parameterType="String">
+	SELECT MNO, ID, PW, NAME, NICKNAME, PHONE, HOUSECODE, ADDRESS1, ADDRESS2, RDATE
+	FROM MEMBERS
+	WHERE ID=#{ID}
+	</select>
+</mapper>
