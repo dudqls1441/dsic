@@ -9,4 +9,6 @@ public interface MemberService {
 	int checkId(String id);
 	int create(Map<String, Object> map);
 	Map<String, Object> selectMember(String id);
+	int checkLogin(Map<String, Object> map);
+	
 }

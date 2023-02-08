@@ -28,4 +28,10 @@ public class MemberDAO {
 	public Map<String,Object> selectMember(String id) {
 		return this.sqlSessionTemplate.selectOne("members.selectMember", id);
 	}
+	
+	public int checkLogin(Map<String, Object> map) {
+		System.out.println("여기까지 왔나?MemberDAO" + map);
+		System.out.println("여기까지 왔나?MemberDAO :  "  +this.sqlSessionTemplate.selectOne("members.checkLogin", map));
+		return this.sqlSessionTemplate.selectOne("members.checkLogin", map);
+	}
 }

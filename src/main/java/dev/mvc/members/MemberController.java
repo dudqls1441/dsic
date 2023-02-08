@@ -1,7 +1,12 @@
 package dev.mvc.members;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,17 +89,40 @@ public class MemberController {
 
 		return json.toString();
 	}
-	
-	  /**
-	   * 새로고침 방지, EL에서 param으로 접근
-	   * @return
-	   */
-	  @RequestMapping(value="/members/msg.do", method=RequestMethod.GET)
-	  public ModelAndView msg(String url){
-	    ModelAndView mav = new ModelAndView();
 
-	    mav.setViewName(url); // forward
-	    
-	    return mav; // forward
-	  }
+	/**
+	 * 새로고침 방지, EL에서 param으로 접근
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/members/msg.do", method = RequestMethod.GET)
+	public ModelAndView msg(String url) {
+		ModelAndView mav = new ModelAndView();
+
+		mav.setViewName(url); // forward
+
+		return mav; // forward
+	}
+
+	/**
+	 * 로그인 ....세션
+	 * 
+	 * @return
+	 */
+	// http://localhost:9091/members/login.do
+	@RequestMapping(value = "/members/login.do", method = RequestMethod.POST)
+	public ModelAndView login_cookie_proc(HttpServletRequest request, HttpServletResponse response, HttpSession session,
+			String id, String pw, @RequestParam(value = "id_save", defaultValue = "") String id_save,
+			@RequestParam(value = "pw_save", defaultValue = "") String pw_save,
+			@RequestParam(value = "return_url", defaultValue = "") String return_url) {
+		ModelAndView mav = new ModelAndView();
+	    Map<String, Object> map = new HashMap<String, Object>();
+	    map.put("ID", id);
+	    map.put("PW", pw);
+	    System.out.println("id   : " +map.get("ID")  +  "    pw  :  "  +map.get("PW"));
+	    int cnt = this.memberService.checkLogin(map);
+	    System.out.println("cnt   : " +cnt);
+
+		return null;
+	}
 }

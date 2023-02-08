@@ -37,4 +37,12 @@ public class MemberServiceImpl implements MemberService{
 		Map<String, Object> map = this.memberDao.selectMember(id);
 		return map;
 	}
+
+	@Override
+	public int checkLogin(Map<String, Object> map) {
+		System.out.println("여기까지 왔나?ServiceImpl");
+		System.out.println("여기까지 왔나?ServiceImpl  : " + this.memberDao.checkLogin(map));
+		int cnt = this.memberDao.checkLogin(map);
+		return cnt;
+	}
 }
